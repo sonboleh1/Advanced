@@ -31,34 +31,45 @@ class Order():
         '''
         Get user input.  There are 5 items on the menu and 6 is to exit the menu.
         '''
-
-        item = int(input(f"Enter your desired item(0-4). Enter 6 to exit the menu. "))
-        if item == 6:
-            print("Thank you for your order.")
-        elif item >= 0 and item < 5:
-            count = int(input(f"How many are you interested to purchase? "))
-
-        while item != 6:
-            if item >= 0 and item < 5:
-                #for i in range(count):
-                self.mybag.add(item)
-                self.mycount.add(count)
-
-            item = int(input(f"Enter your desired item(0-4). Enter 6 to exit the menu "))
+        while True:
+            try:
+                item = int(input(f"Enter your desired item(0-4). Enter 6 to exit the menu. "))
+            except ValueError:
+                print("please enter a numeric input.")
+                continue
             if item == 6:
                 print("Thank you for your order.")
-            elif item >= 0 and item < 5:
-                count = int(input(f"How many {MENU[item]} are you interested to purchase? "))
-                #print(f"{count} X {MENU[item]}")
-
+                break # end loop
+            elif 0 <= item <= 4:
+                while True:
+                    try:
+                        count = int(input(f"How many {MENU[item]} are you interested to purchase? "))
+                        if count <= 0:
+                            print("Please enter a positive number.")
+                            continue
+                        break
+                    except ValueError:
+                        print("Please enter a valid numeric count")
+                self.mybag.add(item)
+                self.mycount.add(count)
+            else:
+                print("Please enter a valid input between 0-4, or 6 to exit.")
         return self.mybag, self.mycount
+
 
     def is_staff(self):
         '''
         Check if the customer is a staff member or a student.
         '''
-        role = input(f"Are you a staff member? Enter Yes or No")
-        return role.lower() == "yes"
+        while True:
+            try:
+                role = input(f"Are you a staff member? Enter Yes or No").strip().lower() # turns it into lowercase
+                if role in ("yes", "no"):
+                    return role.lower() == "yes"
+                else:
+                    raise ValueError("Invalid input")
+            except ValueError:
+                print("Please enter yes or no")
 
 
     def calculate(self, selection, the_count):
@@ -66,8 +77,8 @@ class Order():
         Calculate the sum of order
         '''
         subtotal = 0
-        for item1, item2 in zip(selection, the_count):
-            subtotal += PRICE[item1] * item2
+        for item, count in zip(selection, the_count):
+            subtotal += PRICE[item] * count
 
         print(f"Sum is {subtotal:.2f}. ")
 
@@ -87,8 +98,8 @@ class Order():
         print("------------------")
         print("You ordered:")
         print("------------------")
-        for item1, item2 in zip(the_count, selection):
-            print(f"{item1} X {MENU[item2]}  @  {PRICE[item2]}")
+        for item, count in zip(the_count, selection):
+            print(f"{count} X {MENU[item]}  @  {PRICE[item]}")
 
         print(f"Total before tax: {subtotal:.2f}")
         print(f"Tax:\t{tax:.2f}")
@@ -107,11 +118,11 @@ class Order():
 
         current_time = datetime.now().strftime("%Y-%m-%d")
         # Write to the file
-        with open(FILENAME, "w") as f:
+        with open(FILENAME, "a") as f: # append file, because "w" overrides current data
             f.write(f"Todays date:    {current_time}")
             f.write("\n\n\n")
-            for item1, item2 in zip(the_count, selection):
-                f.write(f"{item1} X {MENU[item2]} @  {PRICE[item2]} \n")
+            for item, count in zip(the_count, selection):
+                f.write(f"{count} X {MENU[item]} @  {PRICE[item]} \n")
 
             f.write(f"Total before tax: {subtotal:.2f} \n")
             f.write(f"Tax: {total-subtotal:.2f} \n")
