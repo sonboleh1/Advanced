@@ -118,7 +118,7 @@ class Order():
 
         current_time = datetime.now().strftime("%Y-%m-%d")
         # Write to the file
-        with open(FILENAME, "a") as f: # append file, because "w" overrides current data
+        with open(FILENAME, "w") as f:
             f.write(f"Todays date:    {current_time}")
             f.write("\n\n\n")
             for item, count in zip(selection, the_count):
