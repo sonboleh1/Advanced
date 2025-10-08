@@ -98,7 +98,7 @@ class Order():
         print("------------------")
         print("You ordered:")
         print("------------------")
-        for item, count in zip(the_count, selection):
+        for item, count in zip(selection, the_count):
             print(f"{count} X {MENU[item]}  @  {PRICE[item]}")
 
         print(f"Total before tax: {subtotal:.2f}")
@@ -121,7 +121,7 @@ class Order():
         with open(FILENAME, "a") as f: # append file, because "w" overrides current data
             f.write(f"Todays date:    {current_time}")
             f.write("\n\n\n")
-            for item, count in zip(the_count, selection):
+            for item, count in zip(selection, the_count):
                 f.write(f"{count} X {MENU[item]} @  {PRICE[item]} \n")
 
             f.write(f"Total before tax: {subtotal:.2f} \n")
