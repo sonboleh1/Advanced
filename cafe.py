@@ -10,12 +10,22 @@ class Order():
     Choose items to order, clear the order or edit the order or cancel the order.
     Once done, calculate the price before tax and after tax for a student/faculty member
     or for the general public
+
+class StaffOrder():
+    def is_staff(self):
     '''
 
     def __init__(self):
         self.display = ArrayBag(MENU)
         self.mybag = ArrayBag()
         self.mycount = ArrayBag()
+
+    def tax_rate(self) -> int:
+        return 0
+
+    def is_staff(self) -> bool:
+        return self.tax_rate() > 0
+        
 
     def display_menu(self):
         '''
@@ -57,9 +67,9 @@ class Order():
         return self.mybag, self.mycount
 
 
-    def is_staff(self):
+'''    def is_staff(self):
         '''
-        Check if the customer is a staff member or a student.
+      #  Check if the customer is a staff member or a student.
         '''
         while True:
             try:
@@ -69,7 +79,7 @@ class Order():
                 else:
                     raise ValueError("Invalid input")
             except ValueError:
-                print("Please enter yes or no")
+                print("Please enter yes or no")'''
 
 
     def calculate(self, selection, the_count):
@@ -89,10 +99,11 @@ class Order():
         Print the bill inluding, food items and quantities, cost of each item,
         tax and total before and after tax.
         '''
-        tax = 0
-        if self.is_staff():
+        tax = subtotal * self.tax_rate()
+    #    tax = 0
+     #   if self.is_staff():
             # add 9% tax
-            tax += subtotal * 0.09
+      #      tax += subtotal * 0.09
 
         # Print bill
         print("------------------")
@@ -128,7 +139,18 @@ class Order():
             f.write(f"Tax: {total-subtotal:.2f} \n")
             f.write(f"Total after tax:  {total:.2f} \n")
 
+#
+class StaffOrder(Order):
+    def tax_rate(self) -> int:
+        return 0.09
+
+class StudentOrder(Order):
+    def tax_rate(self) -> int:
+        reutrn 0.0
+
+# in deanza.py if elif loop, if role == yes, reutrn the stafforder(), elif role== no, reutrn studentorder)
 
     # write a class to re-order 
     # class Reorder(Order):
     
+
