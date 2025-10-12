@@ -8,6 +8,7 @@ Provide user a menu to order from.  Save the selection and return the bill with
 details on each order, tax amount and amount due.
 '''
 from cafe import Order
+from cafe import StaffOrder, StudentOrder
 
 if __name__ == "__main__":
     flag = True
@@ -23,6 +24,15 @@ if __name__ == "__main__":
         if to_continue.lower() == "no":
             print("Exiting....")
             flag = False
+
+def choose_order_class():
+    role = input("Are you a staff member? Enter Yes or No: ").strip().lower()
+    if role == "yes":
+        return StaffOrder()
+    else:
+        return StudentOrder()
+
+order = choose_order_class()
 
 
 '''
@@ -79,3 +89,5 @@ Do you wish to continue? any key for yes and No for nono
 Exiting....
 
 '''
+
+
