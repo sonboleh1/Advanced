@@ -10,11 +10,7 @@ class Order():
     Choose items to order, clear the order or edit the order or cancel the order.
     Once done, calculate the price before tax and after tax for a student/faculty member
     or for the general public
-
-class StaffOrder():
-    def is_staff(self):
     '''
-
     def __init__(self):
         self.display = ArrayBag(MENU)
         self.mybag = ArrayBag()
@@ -26,7 +22,6 @@ class StaffOrder():
     def is_staff(self) -> bool:
         return self.tax_rate() > 0
         
-
     def display_menu(self):
         '''
         Display the food menu
@@ -66,22 +61,6 @@ class StaffOrder():
                 print("Please enter a valid input between 0-4, or 6 to exit.")
         return self.mybag, self.mycount
 
-
-'''    def is_staff(self):
-        '''
-      #  Check if the customer is a staff member or a student.
-        '''
-        while True:
-            try:
-                role = input(f"Are you a staff member? Enter Yes or No").strip().lower() # turns it into lowercase
-                if role in ("yes", "no"):
-                    return role.lower() == "yes"
-                else:
-                    raise ValueError("Invalid input")
-            except ValueError:
-                print("Please enter yes or no")'''
-
-
     def calculate(self, selection, the_count):
         '''
         Calculate the sum of order
@@ -90,20 +69,20 @@ class StaffOrder():
         for item, count in zip(selection, the_count):
             subtotal += PRICE[item] * count
 
-        print(f"Sum is {subtotal:.2f}. ")
-
         return subtotal
 
-    def bill(self, selection, the_count, subtotal):
+    def bill(self, selection, the_count, subtotal, role):
         '''
         Print the bill inluding, food items and quantities, cost of each item,
         tax and total before and after tax.
         '''
-        tax = subtotal * self.tax_rate()
-    #    tax = 0
-     #   if self.is_staff():
-            # add 9% tax
-      #      tax += subtotal * 0.09
+        if role == "yes":
+            tax_rate = StaffOrder().tax_rate()
+        else:
+            tax_rate = StudentOrder().tax_rate()
+        tax = subtotal * tax_rate
+        print(f'Tax is {tax} and tax rate is {tax_rate}')
+
 
         # Print bill
         print("------------------")
@@ -126,7 +105,6 @@ class StaffOrder():
         Save the order to a file
         Include what was ordered, its count and total before tax and after tax
         '''
-
         current_time = datetime.now().strftime("%Y-%m-%d")
         # Write to the file
         with open(FILENAME, "w") as f:
@@ -139,19 +117,12 @@ class StaffOrder():
             f.write(f"Tax: {total-subtotal:.2f} \n")
             f.write(f"Total after tax:  {total:.2f} \n")
 
-#
+class StudentOrder(Order):
+    def tax_rate(self) -> int:
+        return 0.0
+
 class StaffOrder(Order):
     def tax_rate(self) -> int:
         return 0.09
-
-class StudentOrder(Order):
-    def tax_rate(self) -> int:
-        reutrn 0.0
-
-# in deanza.py if elif loop, if role == yes, reutrn the stafforder(), elif role== no, reutrn studentorder)
-
-    # write a class to re-order 
-    # class Reorder(Order):
-    
 
 
